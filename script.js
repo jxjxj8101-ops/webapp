@@ -20,7 +20,7 @@ async function getBalance() {
         const res = await fetch("/get_balance", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ user_id: user.id, initData: tg.initData || "" })
+            body: JSON.stringify({ user_id: user.id, initData: "" })
         });
         const data = await res.json();
         document.getElementById("balance").innerText = data.balance || 0;
