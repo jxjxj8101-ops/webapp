@@ -1,28 +1,19 @@
-const tg = window.Telegram.WebApp;
-tg.expand();
+<script>
+const initData = Telegram.WebApp.initData;
 
-const user = tg.initDataUnsafe?.user || {
-    id: 123456789,
-    first_name: "LocalUser"
-};
+fetch("/profile", {
+  method: "POST",
+  headers: {"Content-Type": "application/json"},
+  body: JSON.stringify({ initData })
+})
+.then(r => r.json())
+.then(data => {
+  if (data.error) {
+    alert(data.error);
+    return;
+  }
 
-async function loadProfile() {
-    const res = await fetch("/profile", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            user_id: user.id,
-            initData: tg.initData || ""
-        })
-    });
-
-    const data = await res.json();
-
-    document.getElementById("username").innerText =
-        data.first_name || "Без імені";
-
-    document.getElementById("balance").innerText =
-        data.cups;
-}
-
-loadProfile();
+  document.getElementById("name").innerText = data.first_name;
+  document.getElementById("balance").innerText = data.balance;
+});
+</script>
