@@ -1,65 +1,64 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-    <meta charset="UTF-8">
-    <title>Mini App</title>
+<meta charset="UTF-8">
+<title>PROERO</title>
 
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-    <style>
-        body {
-            background: #0f1720;
-            color: white;
-            font-family: Arial, sans-serif;
-            padding: 20px;
-        }
+<style>
+body {
+    margin: 0;
+    background: linear-gradient(180deg, #0f1720, #070b11);
+    font-family: Inter, Arial, sans-serif;
+    color: #fff;
+}
 
-        .card {
-            background: #151f2e;
-            border-radius: 16px;
-            padding: 20px;
-        }
+.card {
+    margin: 20px;
+    padding: 20px;
+    border-radius: 20px;
+    background: #121a26;
+    box-shadow: 0 0 30px rgba(0,0,0,.4);
+}
 
-        .title {
-            font-size: 22px;
-            font-weight: bold;
-        }
+.name {
+    font-size: 22px;
+    font-weight: 700;
+}
 
-        .item {
-            margin-top: 10px;
-            opacity: 0.9;
-        }
-    </style>
+.username {
+    opacity: .7;
+    margin-top: 4px;
+}
+
+.balance {
+    margin-top: 20px;
+    font-size: 28px;
+    font-weight: bold;
+    color: #ffd700;
+}
+</style>
 </head>
+
 <body>
-
 <div class="card">
-    <div class="title">Профіль</div>
-
-    <div class="item" id="name">Імʼя: ...</div>
-    <div class="item" id="username">Username: ...</div>
-    <div class="item" id="id">ID: ...</div>
+    <div class="name" id="name">...</div>
+    <div class="username" id="username">@...</div>
+    <div class="balance">🏆 <span id="balance">0</span></div>
 </div>
 
 <script>
-    const tg = window.Telegram.WebApp;
-    tg.expand();
+const tg = window.Telegram.WebApp;
+tg.expand();
 
-    if (!tg.initDataUnsafe || !tg.initDataUnsafe.user) {
-        alert("Відкрий Mini App з Telegram!");
-    } else {
-        const user = tg.initDataUnsafe.user;
+const user = tg.initDataUnsafe.user;
 
-        document.getElementById("name").innerText =
-            "Імʼя: " + user.first_name;
+document.getElementById("name").innerText =
+    user.first_name + (user.last_name ? " " + user.last_name : "");
 
-        document.getElementById("username").innerText =
-            "Username: @" + (user.username ?? "немає");
-
-        document.getElementById("id").innerText =
-            "ID: " + user.id;
-    }
+document.getElementById("username").innerText =
+    "@" + (user.username ?? "no_username");
 </script>
-
 </body>
 </html>
