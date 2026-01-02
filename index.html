@@ -1,55 +1,64 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-<meta charset="UTF-8" />
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
-<style>
-body { background:#0e0e0e; color:white; font-family:sans-serif; }
-.card { padding:15px; background:#1a1a1a; border-radius:12px; }
-button { padding:10px 20px; font-size:16px; }
-</style>
+    <meta charset="UTF-8">
+    <title>Mini App</title>
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <style>
+        body {
+            background: #0f1720;
+            color: white;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .card {
+            background: #151f2e;
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .title {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .item {
+            margin-top: 10px;
+            opacity: 0.9;
+        }
+    </style>
 </head>
 <body>
 
 <div class="card">
-  <img id="photo" width="64"><br>
-  <b id="name"></b><br>
-  🏆 Баланс: <span id="balance">...</span>
+    <div class="title">Профіль</div>
+
+    <div class="item" id="name">Імʼя: ...</div>
+    <div class="item" id="username">Username: ...</div>
+    <div class="item" id="id">ID: ...</div>
 </div>
 
-<br>
-
-<button onclick="spin()">🎰 Крутити рулетку</button>
-<p id="result"></p>
-
 <script>
-const tg = window.Telegram.WebApp;
-tg.expand();
+    const tg = window.Telegram.WebApp;
+    tg.expand();
 
-fetch("https://ТВІЙ-СЕРВЕР/profile", {
-  method: "POST",
-  headers: {"Content-Type":"application/json"},
-  body: JSON.stringify({initData: tg.initData})
-})
-.then(r => r.json())
-.then(d => {
-  document.getElementById("name").innerText = d.first_name;
-  document.getElementById("balance").innerText = d.balance;
-  if (d.photo) document.getElementById("photo").src = d.photo;
-});
+    if (!tg.initDataUnsafe || !tg.initDataUnsafe.user) {
+        alert("Відкрий Mini App з Telegram!");
+    } else {
+        const user = tg.initDataUnsafe.user;
 
-function spin() {
-  fetch("https://ТВІЙ-СЕРВЕР/spin", {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({initData: tg.initData})
-  })
-  .then(r=>r.json())
-  .then(d=>{
-    document.getElementById("result").innerText =
-      "🎉 Ви виграли " + d.win + " 🏆";
-  });
-}
+        document.getElementById("name").innerText =
+            "Імʼя: " + user.first_name;
+
+        document.getElementById("username").innerText =
+            "Username: @" + (user.username ?? "немає");
+
+        document.getElementById("id").innerText =
+            "ID: " + user.id;
+    }
 </script>
 
 </body>
