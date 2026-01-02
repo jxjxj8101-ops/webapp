@@ -1,18 +1,56 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-    <meta charset="UTF-8">
-    <title>Mini App</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<meta charset="UTF-8" />
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+body { background:#0e0e0e; color:white; font-family:sans-serif; }
+.card { padding:15px; background:#1a1a1a; border-radius:12px; }
+button { padding:10px 20px; font-size:16px; }
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1 id="username">Anonymous</h1>
-        <h2>Баланс: <span id="balance">0</span> 🏆</h2>
-        <button id="spinBtn">🎰 Крутити рулетку</button>
-        <p id="prize"></p>
-    </div>
-    <script src="script.js"></script>
+
+<div class="card">
+  <img id="photo" width="64"><br>
+  <b id="name"></b><br>
+  🏆 Баланс: <span id="balance">...</span>
+</div>
+
+<br>
+
+<button onclick="spin()">🎰 Крутити рулетку</button>
+<p id="result"></p>
+
+<script>
+const tg = window.Telegram.WebApp;
+tg.expand();
+
+fetch("https://ТВІЙ-СЕРВЕР/profile", {
+  method: "POST",
+  headers: {"Content-Type":"application/json"},
+  body: JSON.stringify({initData: tg.initData})
+})
+.then(r => r.json())
+.then(d => {
+  document.getElementById("name").innerText = d.first_name;
+  document.getElementById("balance").innerText = d.balance;
+  if (d.photo) document.getElementById("photo").src = d.photo;
+});
+
+function spin() {
+  fetch("https://ТВІЙ-СЕРВЕР/spin", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({initData: tg.initData})
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    document.getElementById("result").innerText =
+      "🎉 Ви виграли " + d.win + " 🏆";
+  });
+}
+</script>
+
 </body>
 </html>
