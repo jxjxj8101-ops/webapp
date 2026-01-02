@@ -1,19 +1,11 @@
-<script>
-const initData = Telegram.WebApp.initData;
-
-fetch("/profile", {
-  method: "POST",
-  headers: {"Content-Type": "application/json"},
-  body: JSON.stringify({ initData })
+fetch("https://projectproero.vercel.app/balance", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({
+        initData: Telegram.WebApp.initData
+    })
 })
 .then(r => r.json())
-.then(data => {
-  if (data.error) {
-    alert(data.error);
-    return;
-  }
-
-  document.getElementById("name").innerText = data.first_name;
-  document.getElementById("balance").innerText = data.balance;
+.then(d => {
+    document.getElementById("balance").innerText = d.balance;
 });
-</script>
